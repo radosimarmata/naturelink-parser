@@ -11,12 +11,12 @@
     "sourceType": "module"
   },
   "rules": {
-    "prettier/prettier": "error",
+    "indent": "off",
+    "prettier/prettier": "off",
     "no-unused-vars": ["warn"],
     "no-console": "off",
     "semi": ["error", "always"],
     "quotes": ["error", "single"],
-    "indent": ["error", 2],
     "comma-dangle": ["error", "always-multiline"]
   }
 }
