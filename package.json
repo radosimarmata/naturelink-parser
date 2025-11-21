@@ -1,5 +1,5 @@
 {
-  "name": "naturelink-parser",
+  "name": "nl-parser",
   "version": "1.0.1",
   "description": "A Node.js parser for Naturelink GPS devices, decoding raw hex data and extracting location, event, and IO information.",
   "type": "module",
