@@ -15,6 +15,7 @@ Naturelink devices transmit compact binary frames over TCP, containing IMEI, GPS
 - **Debugging Fallback**
 
 ## ⚡ Usage
+
 ```
 import { parseNL } from 'naturelink-parser';
 ```
