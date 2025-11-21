@@ -13,37 +13,38 @@ export function interpretIO(id, valBuf, type) {
       return { id, label: 'battery_voltage', value: val, dimension: 'V' };
     case 2:
       return { id, label: 'external_voltage', value: val, dimension: 'V' };
-    case 3: 
+    case 3:
       return { id, label: 'ad1_voltage', value: val, dimension: 'V' };
-    case 4: 
+    case 4:
       return { id, label: 'ad2_voltage', value: val, dimension: 'V' };
-    case 5: 
+    case 5:
       return { id, label: 'ad3_voltage', value: val, dimension: 'V' };
-    case 6: 
+    case 6:
       return { id, label: 'ad4_voltage', value: val, dimension: 'V' };
-    case 7: 
+    case 7:
       return { id, label: 'ad5_voltage', value: val, dimension: 'V' };
-    case 8: 
+    case 8:
       return { id, label: 'ad6_voltage', value: val, dimension: 'V' };
-    case 9: 
+    case 9:
       return { id, label: 'ad7_voltage', value: val, dimension: 'V' };
-    case 10: 
+    case 10:
       return { id, label: 'ad8_voltage', value: val, dimension: 'V' };
     case 11:
       return { id, label: 'hdop', value: val / 10, dimension: '-' };
-    case 12: 
+    case 12:
       return { id, label: 'altitude', value: val, dimension: 'm' };
     case 13:
       return { id, label: 'mileage', value: val, dimension: 'm' };
     case 14:
       return { id, label: 'operation_hours', value: val, dimension: 's' };
-    case 15: 
+    case 15:
       return { id, label: 'input_status_mask', value: val, dimension: '-' };
-    case 16: 
+    case 16:
       return { id, label: 'output_status_mask', value: val, dimension: '-' };
     case 17:
       return {
-        id, label: 'cell_info',
+        id,
+        label: 'cell_info',
         value: {
           mcc: valBuf.readUInt16LE(0),
           mnc: valBuf.readUInt16LE(2),
@@ -52,12 +53,13 @@ export function interpretIO(id, valBuf, type) {
         },
         dimension: '-',
       };
-    case 18: 
+    case 18:
       return { id, label: 'fuel_percentage', value: val / 100.0, dimension: '%' };
     case 19:
       if (type !== 'var' || valBuf.length % 3 !== 0) {
         return {
-          id, label: 'temperature_data',
+          id,
+          label: 'temperature_data',
           value: null,
         };
       }
@@ -78,15 +80,16 @@ export function interpretIO(id, valBuf, type) {
           temperature_c: temperatureC,
         });
       }
-      return { 
-        id, label: 'temperature_sensors', 
-        value: temperatures, 
-        dimension: { 
-          serial_number: '-', 
+      return {
+        id,
+        label: 'temperature_sensors',
+        value: temperatures,
+        dimension: {
+          serial_number: '-',
           temperature: '°C',
         },
       };
-    case 20: 
+    case 20:
       return { id, label: 'geofence_alarm_number', value: val, dimension: '-' };
     case 21:
       return { id, label: 'temp_sensor_alarm_number', value: val, dimension: '-' };
@@ -96,7 +99,8 @@ export function interpretIO(id, valBuf, type) {
       return { id, label: 'ibutton_id', value: val, dimension: '-' };
     case 24:
       return {
-        id, label: 'acceleration',
+        id,
+        label: 'acceleration',
         value: {
           x: readInt16LE(valBuf, 0),
           y: readInt16LE(valBuf, 2),
@@ -107,7 +111,8 @@ export function interpretIO(id, valBuf, type) {
     case 25: {
       if (type !== 'var' || valBuf.length < 10) return null;
       return {
-        id, label: 'trip_data',
+        id,
+        label: 'trip_data',
         value: {
           trip_distance_m: valBuf.readUInt32LE(0),
           trip_time_s: valBuf.readUInt32LE(4),
@@ -119,13 +124,20 @@ export function interpretIO(id, valBuf, type) {
     case 26:
       const valueNetwork = (code) => {
         switch (code) {
-          case 0: return '2G';
-          case 1: return '3G';
-          case 2: return '4G';
-          case 3: return 'LTE CAT-M1';
-          case 4: return 'LTE CAT-NB';
-          case 255: return 'Unknown';
-          default: return 'Unknown';
+          case 0:
+            return '2G';
+          case 1:
+            return '3G';
+          case 2:
+            return '4G';
+          case 3:
+            return 'LTE CAT-M1';
+          case 4:
+            return 'LTE CAT-NB';
+          case 255:
+            return 'Unknown';
+          default:
+            return 'Unknown';
         }
       };
 
@@ -142,7 +154,8 @@ export function interpretIO(id, valBuf, type) {
     case 28: {
       if (type !== 'var' || valBuf.length < 6) return null;
       return {
-        id, label: 'speed_data',
+        id,
+        label: 'speed_data',
         value: {
           overspeeding_duration_s: valBuf.readUInt32LE(0),
           overspeeding_max_speed_kmh: valBuf.readUInt16LE(4),
@@ -156,11 +169,12 @@ export function interpretIO(id, valBuf, type) {
     }
     case 30: {
       if (type !== 'var' || valBuf.length < 3) return null;
-      const messageType = valBuf.readUInt8(0); 
+      const messageType = valBuf.readUInt8(0);
       const callTimeS = valBuf.readUInt16LE(1);
       const callNumber = valBuf.slice(3).toString('ascii');
       return {
-        id, label: 'calling_assistance_message',
+        id,
+        label: 'calling_assistance_message',
         value: {
           message_type: messageType,
           call_time_s: callTimeS,
@@ -178,15 +192,20 @@ export function interpretIO(id, valBuf, type) {
       if (offset + 8 <= valBuf.length) {
         const mac = valBuf.slice(offset, offset + 6).toString('hex');
         offset += 6;
-        const rssi = valBuf.readInt8(offset++); 
-        const flags = valBuf.readUInt8(offset++); 
-        sensors.push({ 
-          mac, 
-          rssi, 
-          flags_mask: flags, 
+        const rssi = valBuf.readInt8(offset++);
+        const flags = valBuf.readUInt8(offset++);
+        sensors.push({
+          mac,
+          rssi,
+          flags_mask: flags,
         });
       }
-      return { id, label: 'eye_sensor_data', value: sensors, dimension: { rssi: 'dBm', flags: 'Mask' } };
+      return {
+        id,
+        label: 'eye_sensor_data',
+        value: sensors,
+        dimension: { rssi: 'dBm', flags: 'Mask' },
+      };
     }
     case 33: {
       if (type !== 'var' || valBuf.length < 8) return null;
@@ -195,32 +214,38 @@ export function interpretIO(id, valBuf, type) {
       if (offset + 8 <= valBuf.length) {
         const mac = valBuf.slice(offset, offset + 6).toString('hex');
         offset += 6;
-        const rssi = valBuf.readInt8(offset++); 
-        const frameType = valBuf.readUInt8(offset++); 
-        beacons.push({ 
-          mac, 
-          rssi, 
+        const rssi = valBuf.readInt8(offset++);
+        const frameType = valBuf.readUInt8(offset++);
+        beacons.push({
+          mac,
+          rssi,
           frame_type: frameType,
         });
       }
-      return { id, label: 'eddystone_beacons', value: beacons, dimension: { rssi: 'dBm', frame_type: '-' } };
+      return {
+        id,
+        label: 'eddystone_beacons',
+        value: beacons,
+        dimension: { rssi: 'dBm', frame_type: '-' },
+      };
     }
-    case 34: { 
+    case 34: {
       if (type !== 'var' || valBuf.length % 5 !== 0) return null;
       const relays = [];
       let offset = 0;
       while (offset + 5 <= valBuf.length) {
         relays.push({
           id: valBuf.readUInt8(offset++),
-          rssi: valBuf.readInt8(offset++), 
+          rssi: valBuf.readInt8(offset++),
           hardware_version: valBuf.readUInt8(offset++),
           firmware_version: valBuf.readUInt8(offset++),
           activation_status: valBuf.readUInt8(offset++),
         });
       }
-      return { 
-        id, label: 'ble_relay_data', 
-        value: relays,  
+      return {
+        id,
+        label: 'ble_relay_data',
+        value: relays,
         dimension: { rssi: 'dBm', version: '-', id: '-', status: '-' },
       };
     }
@@ -241,7 +266,7 @@ export function interpretIO(id, valBuf, type) {
       const torque = valBuf.readInt8(0);
       return { id, label: 'engine_torque_percentage', value: torque, dimension: '%' };
     }
-    case 84: 
+    case 84:
       return { id, label: 'engine_speed', value: val, dimension: 'rpm' };
     case 85:
       return { id, label: 'engine_running_time', value: val / 10.0, dimension: 'h' };
