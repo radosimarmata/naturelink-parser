@@ -60,7 +60,7 @@ export class NaturelinkParser {
       const satellites = satAngle & 0x7f;
       const heading = (satAngle >> 7) & 0x1ff;
 
-      let io = {};
+      let io = [];
       this.readIOBlock(1, io);
       this.readIOBlock(2, io);
       this.readIOBlock(4, io);
@@ -68,20 +68,20 @@ export class NaturelinkParser {
       this.readVarIO(io);
 
       records.push({
-        no: i + 1,
-        event_id: eventId,
-        event_desc: EVENT_MAP[eventId] || `Unknown (${eventId})`,
+        priority: i + 1,
         timestamp,
-        version,
-        data_length: dataLength,
         gps: {
-          lat,
-          lng,
-          speed_kmh: speed,
+          latitude: lat,
+          longitude: lng,
+          speed: speed,
+          angle: i === 0 ? heading : undefined,
           satellites: i === 0 ? satellites : undefined,
-          heading: i === 0 ? heading : undefined,
           valid: i === 0 ? valid : undefined,
         },
+        event_id: eventId,
+        event_desc: EVENT_MAP[eventId] || `Unknown (${eventId})`,
+        version,
+        data_length: dataLength,
         io,
       });
     }
@@ -95,7 +95,16 @@ export class NaturelinkParser {
       const id = this.readUInt8();
       const valBuf = this.read(byteSize);
       const entry = interpretIO(id, valBuf, `${byteSize}byte`);
-      output[entry?.key ?? `io_${id}`] = entry ? entry.val : valBuf.toString('hex');
+      if (entry) {
+        output.push(entry);
+      } else {
+        output.push({
+          id,
+          label: '-',
+          val: valBuf.toString('hex'),
+          dimension: '-',
+        });
+      }
     }
   }
 
@@ -106,7 +115,16 @@ export class NaturelinkParser {
       const size = this.readUInt8();
       const valBuf = this.read(size);
       const entry = interpretIO(id, valBuf, 'var');
-      output[entry?.key ?? `io_var_${id}`] = entry ? entry.val : valBuf.toString('hex');
+      if (entry) {
+        output.push(entry);
+      } else {
+        output.push({
+          id,
+          label: '-',
+          val: valBuf.toString('hex'),
+          dimension: '-',
+        });
+      }
     }
   }
 }
