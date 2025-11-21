@@ -1,9 +1,17 @@
 {
   "name": "naturelink-parser",
-  "version": "1.0.0",
-  "description": "A Node.js parser for Naturelink GPS devices, decoding raw hex data and extracting location, event, and I/O information.",
-  "main": "index.js",
+  "version": "1.0.1",
+  "description": "A Node.js parser for Naturelink GPS devices, decoding raw hex data and extracting location, event, and IO information.",
   "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "start": "node ./src/index.js",
     "test": "mocha ./test --recursive",
@@ -12,7 +20,9 @@
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "format": "npm run lint:fix && npm run prettier:fix",
-    "example": "node ./examples/basic.js"
+    "example": "node ./examples/basic.js",
+    "prepare": "npm run lint && npm run test",
+    "prepublishOnly": "npm run format && npm run test"
   },
   "keywords": [
     "naturelink",
@@ -20,12 +30,24 @@
     "parser",
     "nodejs",
     "iot",
-    "telemetry"
+    "telemetry",
+    "binary",
+    "protocol",
+    "nl01",
+    "nl02"
   ],
   "author": "Rado HT Simarmata <simarmatarado@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/radosimarmata/naturelink-parser.git"
+  },
+  "bugs": {
+    "url": "https://github.com/radosimarmata/naturelink-parser/issues"
+  },
+  "homepage": "https://github.com/radosimarmata/naturelink-parser#readme",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18"
   },
   "dependencies": {
     "dayjs": "^1.11.9"
@@ -37,13 +59,5 @@
     "eslint-plugin-prettier": "^5.5.4",
     "mocha": "^10.2.0",
     "prettier": "^3.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/radosimarmata/naturelink-parser.git"
-  },
-  "bugs": {
-    "url": "https://github.com/radosimarmata/naturelink-parser/issues"
-  },
-  "homepage": "https://github.com/radosimarmata/naturelink-parser#readme"
+  }
 }
