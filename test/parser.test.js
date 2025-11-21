@@ -25,8 +25,8 @@ describe('Naturelink Parser', function () {
     expect(rec).to.have.property('event_id');
     expect(rec).to.have.property('timestamp');
     expect(rec).to.have.property('gps');
-    expect(rec.gps).to.have.property('lat');
-    expect(rec.gps).to.have.property('lng');
+    expect(rec.gps).to.have.property('latitude');
+    expect(rec.gps).to.have.property('longitude');
 
     // Parser tidak error
     expect(result.error).to.be.undefined;
