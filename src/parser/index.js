@@ -1,5 +1,5 @@
-import { NaturelinkParser } from './naturelink-parser.js';
+import NaturelinkParser from './naturelink-parser.js';
 
-export function naturelinkPacket(rawHex) {
+export function parseNL(rawHex) {
   return new NaturelinkParser(rawHex).parse();
 }

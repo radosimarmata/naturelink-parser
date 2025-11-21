@@ -2,7 +2,7 @@ import { parseIMEI } from '../helpers/imei.js';
 import { interpretIO } from '../io/interpret-io.js';
 import { EVENT_MAP } from '../helpers/event-map.js';
 
-export class NaturelinkParser {
+export default class NaturelinkParser {
   constructor(rawHex) {
     this.buffer = Buffer.from(rawHex, 'hex');
     this.offset = 0;
